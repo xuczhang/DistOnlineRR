@@ -25,7 +25,7 @@ beta_truth = data.beta;
 batch_num = 7;
 %% Test different data sets
 tic;
-[beta] = OnlineRC(Xtr_arr, Ytr_arr, batch_num);
+[beta] = ORLR(Xtr_arr, Ytr_arr, batch_num);
 toc;
 
 fprintf('[%dK|p%d|%.2f] - |w-w*|: %f\n', k, p, cr, norm(beta_truth-beta));

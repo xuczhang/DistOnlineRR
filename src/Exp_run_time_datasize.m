@@ -19,8 +19,8 @@ RLHH_result = [];
 OPAA_result = [];
 ORL_result = [];
 ORL0_result = [];
-BatchRC_result = [];
-OnlineRC_result = [];
+DRLR_result = [];
+ORLR_result = [];
 
 for k = 1:1:10
 
@@ -31,8 +31,8 @@ for k = 1:1:10
     OPAA_time = 0;
     ORL_time = 0;
     ORL0_time = 0;
-    BatchRC_time = 0;
-    OnlineRC_time = 0;
+    DRLR_time = 0;
+    ORLR_time = 0;
     
     for idx = 1:1:dup_num
         
@@ -78,18 +78,18 @@ for k = 1:1:10
         elapsedTime = toc;
         ORL0_time = ORL0_time + elapsedTime;
         
-        % BatchRC
+        % DRLR
         tic;
-        BatchRC_beta = BatchRC(Xtr_arr, Ytr_arr);
+        DRLR_beta = DRLR(Xtr_arr, Ytr_arr);
         elapsedTime = toc;
-        BatchRC_time = BatchRC_time + elapsedTime;
+        DRLR_time = DRLR_time + elapsedTime;
         
-        % OnlineRC
+        % ORLR
         tic;
         batch_num = 7;
-        OnlineRC_beta = OnlineRC(Xtr_arr, Ytr_arr, batch_num);
+        ORLR_beta = ORLR(Xtr_arr, Ytr_arr, batch_num);
         elapsedTime = toc;
-        OnlineRC_time = OnlineRC_time + elapsedTime;
+        ORLR_time = ORLR_time + elapsedTime;
         
     
     end
@@ -99,11 +99,11 @@ for k = 1:1:10
     OPAA_result = [OPAA_result OPAA_time/dup_num];
     ORL_result = [ORL_result ORL_time/dup_num];
     ORL0_result = [ORL0_result ORL0_time/dup_num];
-    BatchRC_result = [BatchRC_result BatchRC_time/dup_num];
-    OnlineRC_result = [OnlineRC_result OnlineRC_time/dup_num];
+    DRLR_result = [DRLR_result DRLR_time/dup_num];
+    ORLR_result = [ORLR_result ORLR_time/dup_num];
     
 end
-result_path = 'D:/Dropbox/PHD/publications/ICDM2017_OnlineRC/experiment/';
+result_path = 'D:/Dropbox/PHD/publications/ICDM2017_ORLR/experiment/';
 file_output = strcat(result_path, 'runtime_cr', num2str(cr*100), '_', num2str(b), 'B_', 'p', num2str(p), '_', noise_str);
 file_output = file_output(1:end-1);
-save(file_output, 'OLS_result', 'RLHH_result', 'OPAA_result', 'ORL_result', 'ORL0_result', 'BatchRC_result', 'OnlineRC_result');
+save(file_output, 'OLS_result', 'RLHH_result', 'OPAA_result', 'ORL_result', 'ORL0_result', 'DRLR_result', 'ORLR_result');

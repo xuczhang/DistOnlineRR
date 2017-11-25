@@ -1,4 +1,4 @@
-function [ beta, new_beta_arr, new_mc ] = OnlineRC_inc(beta_arr, mc, Xtr, y)
+function [ beta, new_beta_arr, new_mc ] = ORLR_inc(beta_arr, mc, Xtr, y)
 %RLH Summary of this function goes here
 
 p = size(Xtr, 1);

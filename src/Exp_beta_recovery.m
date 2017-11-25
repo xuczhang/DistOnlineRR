@@ -12,7 +12,7 @@ else
     noise_str = 'nn_';
 end
 
-dup_num = 10;
+dup_num = 1;
 
 
 OLS_result = [];
@@ -20,8 +20,9 @@ RLHH_result = [];
 OPAA_result = [];
 ORL_result = [];
 ORL0_result = [];
-BatchRC_result = [];
-OnlineRC_result = [];
+DRLR_result = [];
+ORLR_result = [];
+ORLR2_result = [];
 
 fprintf('************ p=%d k=%d b=%d bNoise=%d ************\n', p, k, b, bNoise);
 
@@ -40,8 +41,9 @@ for cr = 0.05:0.05:0.4
     OPAA_err = 0;
     ORL_err = 0;
     ORL0_err = 0;
-    BatchRC_err = 0;
-    OnlineRC_err = 0;
+    DRLR_err = 0;
+    ORLR_err = 0;
+    ORLR2_err = 0;
     
     for idx = 1:1:dup_num
             
@@ -78,28 +80,33 @@ for cr = 0.05:0.05:0.4
         ORL0_beta = Baseline_ORL(Xtr_arr, Ytr_arr, cr, ca);
         ORL0_err = ORL0_err + norm(beta_truth-ORL0_beta);
         
-        % BatchRC
-        BatchRC_beta = BatchRC(Xtr_arr, Ytr_arr);
-        BatchRC_err = BatchRC_err + norm(beta_truth-BatchRC_beta);
+        % DRLR
+        DRLR_beta = DRLR(Xtr_arr, Ytr_arr);
+        DRLR_err = DRLR_err + norm(beta_truth-DRLR_beta);
         
-        % OnlineRC
+        % ORLR
         batch_num = 7;
-        OnlineRC_beta = OnlineRC(Xtr_arr, Ytr_arr, batch_num);
-        OnlineRC_err = OnlineRC_err + norm(beta_truth-OnlineRC_beta);
+        ORLR_beta = ORLR(Xtr_arr, Ytr_arr, batch_num);
+        ORLR_err = ORLR_err + norm(beta_truth-ORLR_beta);
+        
+        % ORLR2
+        batch_num = 7;
+        ORLR2_beta = ORLR_v2(Xtr_arr, Ytr_arr, batch_num);
+        ORLR2_err = ORLR2_err + norm(beta_truth-ORLR2_beta);
     end
     
-    fprintf('OLS[%f] RLHH[%f] OPAA[%f] ORL[%f] ORL0[%f] BatchRC[%f] OnlineRC[%f] \n', OLS_err/dup_num, RLHH_err/dup_num, OPAA_err/dup_num, ORL_err/dup_num, ORL0_err/dup_num, BatchRC_err/dup_num, OnlineRC_err/dup_num);
+    fprintf('OLS[%f] RLHH[%f] OPAA[%f] ORL[%f] ORL0[%f] DRLR[%f] ORLR[%f] ORLR2[%f]\n', OLS_err/dup_num, RLHH_err/dup_num, OPAA_err/dup_num, ORL_err/dup_num, ORL0_err/dup_num, DRLR_err/dup_num, ORLR_err/dup_num, ORLR2_err/dup_num);
     OLS_result = [OLS_result OLS_err/dup_num];
     RLHH_result = [RLHH_result RLHH_err/dup_num];
     OPAA_result = [OPAA_result OPAA_err/dup_num];    
     ORL_result = [ORL_result ORL_err/dup_num];
     ORL0_result = [ORL0_result ORL0_err/dup_num];
-    BatchRC_result = [BatchRC_result BatchRC_err/dup_num];
-    OnlineRC_result = [OnlineRC_result OnlineRC_err/dup_num];
-    %fprintf('[%d] - |w-w*|: %f outlier_idx:%d \n', n_o, total_error/21, size(S, 1));
-    %fprintf('[%d] - |w-w*|: %f outlier_idx:%d \n', n_o, norm(w_truth-TORRENT_w), size(S, 1));
+    DRLR_result = [DRLR_result DRLR_err/dup_num];
+    ORLR_result = [ORLR_result ORLR_err/dup_num];
+    ORLR2_result = [ORLR2_result ORLR2_err/dup_num];
+
 end
-result_path = 'D:/Dropbox/PHD/publications/ICDM2017_OnlineRC/experiment/';
-file_output = strcat(result_path, 'beta_', num2str(b), 'B_', num2str(k), 'K_', 'p', num2str(p), '_', noise_str);
-file_output = file_output(1:end-1);
-save(file_output, 'OLS_result', 'RLHH_result', 'OPAA_result', 'ORL_result', 'ORL0_result', 'BatchRC_result', 'OnlineRC_result');
+% result_path = 'D:/Dropbox/PHD/publications/ICDM2017_ORLR/experiment/';
+% file_output = strcat(result_path, 'beta_', num2str(b), 'B_', num2str(k), 'K_', 'p', num2str(p), '_', noise_str);
+% file_output = file_output(1:end-1);
+% save(file_output, 'OLS_result', 'RLHH_result', 'OPAA_result', 'ORL_result', 'ORL0_result', 'DRLR_result', 'ORLR_result');
